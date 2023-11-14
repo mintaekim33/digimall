@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext } from 'react'
 import './App.css'
 // import './styles/App.css';
 import { Routes, Route, Link } from "react-router-dom";
@@ -8,6 +8,10 @@ import About from './components/About';
 import Cart from './components/Cart';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
+import ProductDetails from './components/ProductDetails';
+
+export const DataContext = createContext();
+console.log('DataContent', DataContext);
 
 function App() {
 
@@ -19,10 +23,10 @@ function App() {
     .then(data => setProducts(data.products));
   },[]);
 
-  console.log(products)
+  // console.log(products)
 
   return (
-    <>
+    <DataContext.Provider value={products}>
     {/* <nav className='navbar'> 
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
@@ -36,12 +40,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products products={products} />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
       </Routes>
     </main>
-    </>
+    </DataContext.Provider>
   )
 }
 
