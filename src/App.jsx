@@ -21,9 +21,32 @@ function App() {
     fetch('https://dummyjson.com/products')
     .then(res => res.json())
     .then(data => setProducts(data.products));
+    // storeData(products);
   },[]);
 
-  // console.log(products)
+  console.log(products)
+
+  //use airtable for CRUD(?)
+  const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
+  const BASE_URL = 'https://api.airtable.com/v0/app2XUWkEqc6qfyPb';
+
+  async function storeData(products) {
+    const response = await fetch(`${BASE_URL}/productsTable`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`, 
+      },
+      body: JSON.stringify(products)
+    })
+    console.log(products)
+    const json = await response.json();
+    console.log(json)
+  }
+  // storeData(products);
+
+
+
 
   return (
     <DataContext.Provider value={products}>

@@ -12,6 +12,7 @@ function ProductDetails() {
       {dataContext.map(data => {
         return (
             data.title
+            //need to filter only the matching product data ! but how
         )
       })}
     </div>
