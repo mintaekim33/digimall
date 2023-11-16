@@ -11,40 +11,60 @@ import Navbar from './components/Navbar';
 import ProductDetails from './components/ProductDetails';
 
 export const DataContext = createContext();
-console.log('DataContent', DataContext);
+// console.log('DataContent', DataContext);
 
 function App() {
 
   const [products, setProducts] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const product = products.find(x => x.id === selectedProductId);
+
+  function addButtonHandler() {
+    setSelectedProductId(product.id);
+    constructCartData();
+    addToCart();
+}
 
   useEffect(() => {
-    fetch('https://dummyjson.com/products')
-    .then(res => res.json())
-    .then(data => setProducts(data.products));
-    // storeData(products);
+    async function fetchData() {
+      const response = await fetch('https://dummyjson.com/products');
+      const jsonData = await response.json();
+      setProducts(jsonData.products);
+    }
+    fetchData();
   },[]);
 
   console.log(products)
 
-  //use airtable for CRUD(?)
+  // search view and store view diff?
+
+  //use airtable for CRUD
   const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
   const BASE_URL = 'https://api.airtable.com/v0/app2XUWkEqc6qfyPb';
 
-  async function storeData(products) {
-    const response = await fetch(`${BASE_URL}/productsTable`, {
+  function constructCartData(selectedProductId) {
+    
+  }
+
+  const cartData = {
+    fields: {
+      // Name: products.map(product => product.title)
+      Name: 'hdsdf'
+    }
+  }
+
+  async function addToCart() {
+    const response = await fetch(`${BASE_URL}/cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${TOKEN}`, 
       },
-      body: JSON.stringify(products)
+      body: JSON.stringify(cartData)
     })
-    console.log(products)
     const json = await response.json();
-    console.log(json)
   }
-  // storeData(products);
-
+  addToCart();
 
 
 
