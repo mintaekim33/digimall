@@ -3,16 +3,16 @@ import { DataContext } from '../App'
 
 function ProductDetails() {
 
-    const dataContext = useContext(DataContext);
+    const { products } = useContext(DataContext);
 
-    console.log(dataContext)
+    // console.log(dataContext)
 
   return (
     <div>
-      {dataContext.map(data => {
+      {products.map(data => {
         return (
             data.title
-            //need to filter only the matching product data ! but how
+            //need to filter only the matching product data
         )
       })}
     </div>

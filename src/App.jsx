@@ -16,14 +16,16 @@ export const DataContext = createContext();
 function App() {
 
   const [products, setProducts] = useState([]);
-  const [selectedProductId, setSelectedProductId] = useState(null);
-  const product = products.find(x => x.id === selectedProductId);
+  // const [selectedProduct, setSelectedProduct] = useState(null);
+  // const product = products.find(x => x === selectedProduct);
 
-  function addButtonHandler() {
-    setSelectedProductId(product.id);
-    constructCartData();
-    addToCart();
-}
+//   function addButtonHandler() {
+//     console.log(product)
+//     // setSelectedProduct(product); // choose selected product
+//     // console.log(selectedProduct);
+//     // constructCartData(); // create request body in a required format
+//     // addToCart(); // send post request
+// }
 
   useEffect(() => {
     async function fetchData() {
@@ -36,24 +38,32 @@ function App() {
 
   console.log(products)
 
-  // search view and store view diff?
-
   //use airtable for CRUD
   const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
   const BASE_URL = 'https://api.airtable.com/v0/app2XUWkEqc6qfyPb';
 
-  function constructCartData(selectedProductId) {
-    
-  }
-
-  const cartData = {
-    fields: {
-      // Name: products.map(product => product.title)
-      Name: 'hdsdf'
+  function constructCartData(selectedProduct) {
+    const cartData = {
+      fields: {
+        Id: selectedProduct.id,
+        Title: selectedProduct.title,
+        Quantity: 1,
+        Image: selectedProduct.images[0]
+      }
     }
+    return cartData;
   }
 
-  async function addToCart() {
+  // const cartData = {
+  //   fields: {
+  //     // Name: products.map(product => product.title)
+  //     Name: 'hdsdf'
+  //   }
+  // }
+
+
+
+  async function addToCart(cartData) {
     const response = await fetch(`${BASE_URL}/cart`, {
       method: "POST",
       headers: {
@@ -64,12 +74,14 @@ function App() {
     })
     const json = await response.json();
   }
-  addToCart();
+  // addToCart();
 
+
+  // console.log(selectedProduct);
 
 
   return (
-    <DataContext.Provider value={products}>
+    <DataContext.Provider value={{products, constructCartData, addToCart}}>
     {/* <nav className='navbar'> 
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
