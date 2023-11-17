@@ -1,0 +1,6 @@
+.cartItemsContainer {
+    margin: 30px auto;
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+}

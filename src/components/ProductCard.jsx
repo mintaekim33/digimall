@@ -5,9 +5,7 @@ import { DataContext } from '../App'
 
 function ProductCard({ product,addButtonHandler }) {
 
-    const [selectedProduct, setSelectedProduct] = useState(null);
-
-    const { constructCartData,addToCart } = useContext(DataContext);
+    const { addToCart, renderAddedCartItems } = useContext(DataContext);
     // console.log(dataContext)
 
     function addButtonHandler() {
@@ -24,6 +22,7 @@ function ProductCard({ product,addButtonHandler }) {
         }
       }
         addToCart(cartData); // send post request
+        renderAddedCartItems(product);
     }
     
   return (

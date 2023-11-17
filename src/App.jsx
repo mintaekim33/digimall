@@ -16,6 +16,7 @@ export const DataContext = createContext();
 function App() {
 
   const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   // const [selectedProduct, setSelectedProduct] = useState(null);
   // const product = products.find(x => x === selectedProduct);
 
@@ -42,17 +43,17 @@ function App() {
   const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
   const BASE_URL = 'https://api.airtable.com/v0/app2XUWkEqc6qfyPb';
 
-  function constructCartData(selectedProduct) {
-    const cartData = {
-      fields: {
-        Id: selectedProduct.id,
-        Title: selectedProduct.title,
-        Quantity: 1,
-        Image: selectedProduct.images[0]
-      }
-    }
-    return cartData;
-  }
+  // function constructCartData(selectedProduct) {
+  //   const cartData = {
+  //     fields: {
+  //       Id: selectedProduct.id,
+  //       Title: selectedProduct.title,
+  //       Quantity: 1,
+  //       Image: selectedProduct.images[0]
+  //     }
+  //   }
+  //   return cartData;
+  // }
 
   // const cartData = {
   //   fields: {
@@ -60,9 +61,7 @@ function App() {
   //     Name: 'hdsdf'
   //   }
   // }
-
-
-
+console.log(cartItems)
   async function addToCart(cartData) {
     const response = await fetch(`${BASE_URL}/cart`, {
       method: "POST",
@@ -73,15 +72,25 @@ function App() {
       body: JSON.stringify(cartData)
     })
     const json = await response.json();
+
+    // const newCartItems = [...cartItems, ]
   }
   // addToCart();
+
+  function renderAddedCartItems(item) {
+    const newCartItems = [...cartItems, item];
+    if (cartItems.includes(item)) {
+      return cartItems;
+    }
+    setCartItems(newCartItems);
+  }
 
 
   // console.log(selectedProduct);
 
 
   return (
-    <DataContext.Provider value={{products, constructCartData, addToCart}}>
+    <DataContext.Provider value={{products, addToCart, renderAddedCartItems}}>
     {/* <nav className='navbar'> 
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
@@ -98,7 +107,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={<Cart cartItems={cartItems} />} />
       </Routes>
     </main>
     </DataContext.Provider>
