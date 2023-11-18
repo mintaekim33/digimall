@@ -28,6 +28,7 @@ function App() {
 //     // addToCart(); // send post request
 // }
 
+  // fetch dummy products
   useEffect(() => {
     async function fetchData() {
       const response = await fetch('https://dummyjson.com/products');
@@ -37,7 +38,7 @@ function App() {
     fetchData();
   },[]);
 
-  console.log(products)
+  // console.log(products)
 
   //use airtable for CRUD
   const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
@@ -61,7 +62,7 @@ function App() {
   //     Name: 'hdsdf'
   //   }
   // }
-console.log(cartItems)
+// console.log(products)
   async function addToCart(cartData) {
     const response = await fetch(`${BASE_URL}/cart`, {
       method: "POST",
@@ -73,7 +74,6 @@ console.log(cartItems)
     })
     const json = await response.json();
 
-    // const newCartItems = [...cartItems, ]
   }
   // addToCart();
 
@@ -86,11 +86,27 @@ console.log(cartItems)
   }
 
 
+  // pass this to productCard to prevent airtable from having duplicates
+  async function updateCartItemQty(cartData) {
+    // refer to update field docs
+    const response = await fetch(`${BASE_URL}/cart`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`, 
+      },
+      body: JSON.stringify(cartData)
+    })
+    const json = await response.json();
+
+  }
+
+
   // console.log(selectedProduct);
 
 
   return (
-    <DataContext.Provider value={{products, addToCart, renderAddedCartItems}}>
+    <DataContext.Provider value={{products, cartItems, addToCart, renderAddedCartItems}}>
     {/* <nav className='navbar'> 
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
@@ -107,7 +123,7 @@ console.log(cartItems)
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart cartItems={cartItems} />} />
+        <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
       </Routes>
     </main>
     </DataContext.Provider>
