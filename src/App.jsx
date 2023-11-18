@@ -63,18 +63,65 @@ function App() {
   //   }
   // }
 // console.log(products)
-  async function addToCart(cartData) {
-    const response = await fetch(`${BASE_URL}/cart`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`, 
-      },
-      body: JSON.stringify(cartData)
-    })
-    const json = await response.json();
 
+  // async function addToCart(cartData) {
+  //   const response = await fetch(`${BASE_URL}/cart`, {
+  //     method: "POST",
+  //     // method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${TOKEN}`, 
+  //     },
+  //     body: JSON.stringify(cartData),
+  //     // performUpsert: true
+  //   })
+  //   const json = await response.json();
+  // }
+
+  const quantityData = {
+    fields: {
+      quantity: 2
+    }
   }
+
+  async function upsertToCart(cartItemId, cartData) {
+    const response = await fetch(`${BASE_URL}/cart?filterByFormula=id=${cartItemId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      // performUpsert: true
+    })
+    console.log(response)
+    const records = await response.json();
+    console.log(records.records)
+    if (records && records.records.length > 0) {
+      // if record exists, update it
+      const existingRecordId = records.records[0].id;
+      console.log(existingRecordId)
+      const patchResponse = await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quantityData)
+      });
+      console.log(patchResponse)
+      console.log('Record updated:', existingRecordId);
+    } else {
+      await fetch(`${BASE_URL}/cart`, {
+        method: 'POST',
+          headers: {
+            Authorization: `Bearer ${TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cartData)
+      });
+      console.log('New record inserted for ID: ', cartItemId)
+    }
+  }
+
   // addToCart();
 
   function renderAddedCartItems(item) {
@@ -106,7 +153,7 @@ function App() {
 
 
   return (
-    <DataContext.Provider value={{products, cartItems, addToCart, renderAddedCartItems}}>
+    <DataContext.Provider value={{products, cartItems, upsertToCart, renderAddedCartItems}}>
     {/* <nav className='navbar'> 
       <Link to="/">Home</Link>
       <Link to="/products">Products</Link>
