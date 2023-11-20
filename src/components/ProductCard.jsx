@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { DataContext } from "../App";
 
 function ProductCard({ product, addButtonHandler }) {
-  const { upsertToCart, renderAddedCartItems, cartItems, isInCart } = useContext(DataContext);
+  const { upsertToCart, renderAddedCartItems, cartItems, isInCart, itemQuantity, incrementItemQuantity } = useContext(DataContext);
 
-  const [itemQuantity, setItemQuantity] = useState(1);
-    function incrementItemQuantity() {
-        setItemQuantity(itemQuantity + 1);
-    }
+//   const [itemQuantity, setItemQuantity] = useState(1);
+//     function incrementItemQuantity() {
+//         setItemQuantity(itemQuantity + 1);
+//     }
 
   const cartData = {
     fields: {
@@ -29,14 +29,8 @@ function ProductCard({ product, addButtonHandler }) {
 };
   
   function addButtonHandler() {
-
-    if (isInCart) incrementItemQuantity();
-
-    // isInCart && incrementItemQuantity();
-    // console.log(itemQuantity)
-    // cartData.fields.quantity++
-    //   incrementItemQuantity();
-    //   console.log(itemQuantity)
+    
+    // if (isInCart) incrementItemQuantity();
 
       const quantityData = {
         fields: {
@@ -44,15 +38,10 @@ function ProductCard({ product, addButtonHandler }) {
         }
       }
 
-    // setSelectedProduct(product); // choose selected product
-    //    constructCartData(product); // create request body in a required format
-
-    //  addToCart(cartData); // send post request
       upsertToCart(product.id, cartData, quantityData); // send post request
       console.log(cartData.fields.quantity)
       console.log(quantityData.fields.quantity)
       renderAddedCartItems(product); // display cart items
-    // }
   }
 
   return (

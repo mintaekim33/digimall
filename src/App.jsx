@@ -16,10 +16,13 @@ function App() {
 
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [isInCart, setIsInCart] = useState(false);
+  // const [isInCart, setIsInCart] = useState(false);
   const [itemQuantity, setItemQuantity] = useState(1);
+
     function incrementItemQuantity() {
-        setItemQuantity(itemQuantity + 1);
+        setItemQuantity(prevQty => {
+          return prevQty + 1;
+        });
     }
 
 //   function addButtonHandler() {
@@ -79,8 +82,8 @@ function App() {
         },
         body: JSON.stringify(quantityData)
       });
-      // incrementItemQuantity();
-      setIsInCart(true)
+      incrementItemQuantity();
+      // setIsInCart(true)
       console.log('Record updated:', existingRecordId);
     } else {
       await fetch(`${BASE_URL}/cart`, {
@@ -103,8 +106,18 @@ function App() {
     setCartItems(newCartItems);
   }
 
+  async function deleteCartItem(cartItemId) {
+    const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    })
+    console.log(response)
+  }
+
   return (
-    <DataContext.Provider value={{products, cartItems, upsertToCart, renderAddedCartItems, isInCart, itemQuantity, incrementItemQuantity}}>
+    <DataContext.Provider value={{products, cartItems, upsertToCart, renderAddedCartItems, deleteCartItem, itemQuantity, incrementItemQuantity}}>
     
     <Navbar />
     <main>
