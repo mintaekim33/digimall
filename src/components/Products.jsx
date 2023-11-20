@@ -8,25 +8,19 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-function Products({ products, addButtonHandler }) {
+function Products({ products, setProducts, addButtonHandler }) {
 
-  function search() {
-    const input = document.querySelector(".search-bar").value;
-    if (input === "") {
-      return;
-    } else {
-      products.filter(searchProduct => {
+  async function search(e) {
+    //   const filteredProducts = products.filter(searchProduct => {
+    //     //   console.log(searchProduct)
+    //     return searchProduct.title.toLowerCase().includes(e.target.value.toLowerCase());
+    //   })
+    //   setProducts(filteredProducts);
 
-      })
-      document.querySelector(".search-bar").value = "";
-    }
+    const response = await fetch(`https://dummyjson.com/products/search?q=${e.target.value}`)
+    const jsonData = await response.json();
+    setProducts(jsonData.products);
   };
-
-  function keyHandler(e) {
-    if (e.key === "Enter") {
-      search();
-    }
-  }
 
   return (
     <div className="productContainer">
@@ -39,13 +33,14 @@ function Products({ products, addButtonHandler }) {
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search"
           inputProps={{ "aria-label": "search" }}
+          onChange={search}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
         </IconButton>
       </Paper>
 
-      {products.map((product) => {
+      {products && products.map((product) => {
         return (
           <ProductCard
             key={product.id}

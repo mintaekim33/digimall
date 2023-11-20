@@ -2,6 +2,7 @@ import { Paper } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
+import '../styles/ProductCard.css';
 
 function ProductCard({ product, addButtonHandler }) {
   const { upsertToCart, renderAddedCartItems, cartItems, isInCart, itemQuantity, incrementItemQuantity } = useContext(DataContext);
@@ -29,7 +30,7 @@ function ProductCard({ product, addButtonHandler }) {
 };
   
   function addButtonHandler() {
-    
+
     // if (isInCart) incrementItemQuantity();
 
       const quantityData = {
@@ -41,11 +42,11 @@ function ProductCard({ product, addButtonHandler }) {
       upsertToCart(product.id, cartData, quantityData); // send post request
       console.log(cartData.fields.quantity)
       console.log(quantityData.fields.quantity)
-      renderAddedCartItems(product); // display cart items
+    //   renderAddedCartItems(product); // display cart items
   }
 
   return (
-    <Paper>
+    <Paper className="productCard">
       <Link to={"/products/" + product.id}>
         <img src={product.images[0]} />
         <h5>{product.title}</h5>

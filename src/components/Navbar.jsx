@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Navbar.css";
 import { AppBar, Button, Stack, Toolbar, Typography } from "@mui/material";
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 
 function Navbar() {
   return (
@@ -14,6 +15,7 @@ function Navbar() {
     // </nav>
     <AppBar position="static">
       <Toolbar>
+        <LocalOfferOutlinedIcon />
         <Typography variant="h6" component='div' sx={{ flexGrow: 1 }}>
           Digimall
         </Typography>

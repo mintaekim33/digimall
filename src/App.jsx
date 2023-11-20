@@ -20,6 +20,7 @@ function App() {
   const [itemQuantity, setItemQuantity] = useState(1);
 
     function incrementItemQuantity() {
+      // console.log('first')
         setItemQuantity(prevQty => {
           return prevQty + 1;
         });
@@ -113,7 +114,7 @@ function App() {
         Authorization: `Bearer ${TOKEN}`,
       },
     })
-    console.log(response)
+    setCartItems(prevItems => prevItems.filter(item => item.id !== cartItemId));
   }
 
   return (
@@ -123,7 +124,7 @@ function App() {
     <main>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products products={products} />} />
+        <Route path="/products" element={<Products products={products} setProducts={setProducts} />} />
         <Route path="/products/:productId" element={<ProductDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
