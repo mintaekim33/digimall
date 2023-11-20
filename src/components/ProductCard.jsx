@@ -3,11 +3,15 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
 
-function ProductCard({ product, addButtonHandler, itemQuantity, incrementItemQuantity }) {
-  const { upsertToCart, renderAddedCartItems, cartItems } = useContext(DataContext);
-  // console.log(dataContext)
+function ProductCard({ product, addButtonHandler }) {
+  const { upsertToCart, renderAddedCartItems, cartItems, isInCart } = useContext(DataContext);
 
-  const cartData = { // data to SEND
+  const [itemQuantity, setItemQuantity] = useState(1);
+    function incrementItemQuantity() {
+        setItemQuantity(itemQuantity + 1);
+    }
+
+  const cartData = {
     fields: {
       id: product.id,
       brand: product.brand,
@@ -20,38 +24,33 @@ function ProductCard({ product, addButtonHandler, itemQuantity, incrementItemQua
       stock: product.stock,
       thumbnail: product.thumbnail,
       title: product.title,
-      // quantity: itemQuantity,
       quantity: itemQuantity,
     },
 };
   
   function addButtonHandler() {
+
+    if (isInCart) incrementItemQuantity();
+
+    // isInCart && incrementItemQuantity();
+    // console.log(itemQuantity)
     // cartData.fields.quantity++
-      incrementItemQuantity();
-      console.log(itemQuantity)
-      // console.log("pdt from prop passed down: ", product);
+    //   incrementItemQuantity();
+    //   console.log(itemQuantity)
+
+      const quantityData = {
+        fields: {
+            quantity: itemQuantity
+        }
+      }
+
     // setSelectedProduct(product); // choose selected product
-    // console.log("selectedProduct: ", selectedProduct);
     //    constructCartData(product); // create request body in a required format
-    //   performUpsert: {
-        //     fieldsToMergeOn: [
-            //         "title"
-            //     ]
-            //   }
-    // add logic to not update airtable if product already in the airtable
-    // if (cartItems.includes(product)) { // perform upsert
-    //   // only update the qty in the airtable (also need to sync up airtable and cart UI page)
-    //   console.log(cartItems)
-    //   console.log(product)
-    //   console.log("there is a duplicate")
-    // //   incrementItemQuantity();
-    //   return;
-    // } else {
-    //     console.log(cartItems)
-    //     console.log(product)
-    //     console.log("no duplicate")
+
     //  addToCart(cartData); // send post request
-  upsertToCart(product.id, cartData); // send post request
+      upsertToCart(product.id, cartData, quantityData); // send post request
+      console.log(cartData.fields.quantity)
+      console.log(quantityData.fields.quantity)
       renderAddedCartItems(product); // display cart items
     // }
   }
