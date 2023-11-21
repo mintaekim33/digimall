@@ -26,14 +26,11 @@ function Navbar() {
           <Link className="navlink" to="/products">
             Products
           </Link>
-          <Link className="navlink" to="/about">
-            About
+          <Link className="navlink" to="/cart">
+            Cart
           </Link>
           <Link className="navlink" to="/login">
             Login
-          </Link>
-          <Link className="navlink" to="/cart">
-            Cart
           </Link>
         </Stack>
       </Toolbar>

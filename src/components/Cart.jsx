@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import CartItem from './CartItem'
 
 function Cart({ cartItems, setCartItems }) {

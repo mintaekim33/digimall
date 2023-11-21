@@ -12,6 +12,10 @@ function ProductCard({ product, addButtonHandler }) {
 //         setItemQuantity(itemQuantity + 1);
 //     }
 
+// console.log(product.id)
+// console.log(itemQuantity)
+// console.log(itemQuantity[product.id - 1])
+
   const cartData = {
     fields: {
       id: product.id,
@@ -25,19 +29,20 @@ function ProductCard({ product, addButtonHandler }) {
       stock: product.stock,
       thumbnail: product.thumbnail,
       title: product.title,
-      quantity: itemQuantity,
+    //   quantity: itemQuantity[product.id - 1] + 1,
+    //   quantity: itemQuantity,
     },
 };
   
   function addButtonHandler() {
-
+console.log(itemQuantity)
     // if (isInCart) incrementItemQuantity();
 
-      const quantityData = {
-        fields: {
-            quantity: itemQuantity
-        }
-      }
+    //   const quantityData = {
+    //     fields: {
+    //         quantity: itemQuantity[product.id - 1] + 1
+    //     }
+    //   }
 
       upsertToCart(product.id, cartData, quantityData); // send post request
       console.log(cartData.fields.quantity)

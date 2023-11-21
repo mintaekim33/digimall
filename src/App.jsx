@@ -1,59 +1,82 @@
-import { useEffect, useState, createContext } from 'react'
-import './App.css'
+import { useEffect, useState, createContext } from "react";
+import "./App.css";
 // import './styles/App.css';
 import { Routes, Route, Link } from "react-router-dom";
-import Home from './components/Home';
-import Products from './components/Products';
-import About from './components/About';
-import Cart from './components/Cart';
-import Login from './components/Login';
-import Navbar from './components/Navbar';
-import ProductDetails from './components/ProductDetails';
+import Home from "./components/Home";
+import Products from "./components/Products";
+import Cart from "./components/Cart";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
+import ProductDetails from "./components/ProductDetails";
 
 export const DataContext = createContext();
 
 function App() {
-
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   // const [isInCart, setIsInCart] = useState(false);
-  const [itemQuantity, setItemQuantity] = useState(1);
 
-    function incrementItemQuantity() {
-      // console.log('first')
-        setItemQuantity(prevQty => {
-          return prevQty + 1;
-        });
+  // const [itemQuantity, setItemQuantity] = useState(1);
+  // function incrementItemQuantity(cartItemId) {
+  //     setItemQuantity(prevQty => {
+  //       return prevQty + 1;
+  //     });
+  // }
+
+  // const [itemQuantity, setItemQuantity] = useState(new Array(30).fill(0));  // retrieve from backend
+  // function incrementItemQuantity(cartItemId) {
+  //   // setItemQuantity(itemQuantity[cartItemId - 1] + 1);
+  //   const updatedQuantities = [...itemQuantity];
+  //   updatedQuantities[cartItemId - 1] += 1;
+  //   setItemQuantity(updatedQuantities);
+  // }
+  // console.log(itemQuantity)
+
+  const [cartData, setCartData] = useState([]);
+  useEffect(() => {
+    async function fetchCartData() {
+      const response = await fetch(`${BASE_URL}/cart`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      })
+      const jsonData = await response.json();
+      setCartData(jsonData.records)
     }
-
-//   function addButtonHandler() {
-//     console.log(product)
-//     // setSelectedProduct(product); // choose selected product
-//     // console.log(selectedProduct);
-//     // constructCartData(); // create request body in a required format
-//     // addToCart(); // send post request
-// }
+    fetchCartData();
+  },[])
+  
+  console.log(cartData)
+  //   function addButtonHandler() {
+  //     console.log(product)
+  //     // setSelectedProduct(product); // choose selected product
+  //     // console.log(selectedProduct);
+  //     // constructCartData(); // create request body in a required format
+  //     // addToCart(); // send post request
+  // }
 
   // fetch dummy products
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('https://dummyjson.com/products');
+      const response = await fetch("https://dummyjson.com/products");
       const jsonData = await response.json();
       setProducts(jsonData.products);
     }
     fetchData();
-  },[]);
+  }, []);
 
   //use airtable for CRUD
-  const TOKEN = 'pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573';
-  const BASE_URL = 'https://api.airtable.com/v0/app2XUWkEqc6qfyPb';
+  const TOKEN =
+    "pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573";
+  const BASE_URL = "https://api.airtable.com/v0/app2XUWkEqc6qfyPb";
 
   // async function addToCart(cartData) {
   //   const response = await fetch(`${BASE_URL}/cart`, {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${TOKEN}`, 
+  //       Authorization: `Bearer ${TOKEN}`,
   //     },
   //     body: JSON.stringify(cartData),
   //   })
@@ -61,41 +84,44 @@ function App() {
   // }
 
   async function upsertToCart(cartItemId, cartData, quantityData) {
-    const response = await fetch(`${BASE_URL}/cart?filterByFormula=id=${cartItemId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
-      // performUpsert: true
-    })
-    console.log(response)
+    const response = await fetch(
+      `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+    console.log(response);
     const records = await response.json();
-    console.log(records.records)
+    console.log(records.records);
     if (records && records.records.length > 0) {
       // if record exists, update it
       const existingRecordId = records.records[0].id;
-      console.log(existingRecordId)
+      console.log(existingRecordId);
       await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(quantityData)
+        body: JSON.stringify(quantityData),
       });
-      incrementItemQuantity();
+      // console.log(cartItemId)
+      incrementItemQuantity(cartItemId);
       // setIsInCart(true)
-      console.log('Record updated:', existingRecordId);
+      console.log("Record updated:", existingRecordId);
     } else {
       await fetch(`${BASE_URL}/cart`, {
-        method: 'POST',
-          headers: {
-            Authorization: `Bearer ${TOKEN}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(cartData)
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartData),
       });
-      console.log('New record inserted for ID: ', cartItemId)
+      console.log("New record inserted for ID: ", cartItemId);
     }
   }
 
@@ -113,26 +139,42 @@ function App() {
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
-    })
-    setCartItems(prevItems => prevItems.filter(item => item.id !== cartItemId));
+    });
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== cartItemId)
+    );
   }
 
   return (
-    <DataContext.Provider value={{products, cartItems, upsertToCart, renderAddedCartItems, deleteCartItem, itemQuantity, incrementItemQuantity}}>
-    
-    <Navbar />
-    <main>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products products={products} setProducts={setProducts} />} />
-        <Route path="/products/:productId" element={<ProductDetails />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} />} />
-      </Routes>
-    </main>
+    <DataContext.Provider
+      value={{
+        products,
+        cartItems,
+        upsertToCart,
+        renderAddedCartItems,
+        deleteCartItem,
+        // itemQuantity,
+        // incrementItemQuantity,
+      }}
+    >
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/products"
+            element={<Products products={products} setProducts={setProducts} />}
+          />
+          <Route path="/products/:productId" element={<ProductDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/cart"
+            element={<Cart cartItems={cartItems} setCartItems={setCartItems} />}
+          />
+        </Routes>
+      </main>
     </DataContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
