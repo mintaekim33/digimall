@@ -14,7 +14,6 @@ export const DataContext = createContext();
 function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  // const [isInCart, setIsInCart] = useState(false);
 
   // const [itemQuantity, setItemQuantity] = useState(1);
   // function incrementItemQuantity(cartItemId) {
@@ -42,12 +41,25 @@ function App() {
         },
       })
       const jsonData = await response.json();
-      setCartData(jsonData.records)
+      const fetchedCartData = jsonData.records.map((data) => ({
+        ...data.fields,
+        // id: data.id,
+      }));
+      setCartData(fetchedCartData)
+      // console.log(jsonData.records)
     }
     fetchCartData();
   },[])
   
   console.log(cartData)
+
+  // function incrementItemQuantity(cartItemId) {
+  //   cartData.map(item => {
+  //     if (item.id === cartItemId) item.quantity++;
+  //   })
+  // }
+
+
   //   function addButtonHandler() {
   //     console.log(product)
   //     // setSelectedProduct(product); // choose selected product
@@ -83,7 +95,7 @@ function App() {
   //   const json = await response.json();
   // }
 
-  async function upsertToCart(cartItemId, cartData, quantityData) {
+  async function upsertToCart(cartItemId, itemData, quantityData) {
     const response = await fetch(
       `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
       {
@@ -93,13 +105,13 @@ function App() {
         },
       }
     );
-    console.log(response);
     const records = await response.json();
-    console.log(records.records);
+    // console.log(records.records);
+
     if (records && records.records.length > 0) {
       // if record exists, update it
       const existingRecordId = records.records[0].id;
-      console.log(existingRecordId);
+      // console.log(existingRecordId);
       await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
         method: "PATCH",
         headers: {
@@ -108,10 +120,8 @@ function App() {
         },
         body: JSON.stringify(quantityData),
       });
-      // console.log(cartItemId)
-      incrementItemQuantity(cartItemId);
-      // setIsInCart(true)
-      console.log("Record updated:", existingRecordId);
+      // incrementItemQuantity(cartItemId);
+      // console.log("Record updated:", existingRecordId);
     } else {
       await fetch(`${BASE_URL}/cart`, {
         method: "POST",
@@ -119,19 +129,19 @@ function App() {
           Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(cartData),
+        body: JSON.stringify(itemData),
       });
-      console.log("New record inserted for ID: ", cartItemId);
+      // console.log("New record inserted for ID: ", cartItemId);
     }
   }
 
-  function renderAddedCartItems(item) {
-    const newCartItems = [...cartItems, item];
-    if (cartItems.includes(item)) {
-      return cartItems;
-    }
-    setCartItems(newCartItems);
-  }
+  // function renderAddedCartItems(item) {
+  //   const newCartItems = [...cartItems, item];
+  //   if (cartItems.includes(item)) {
+  //     return cartItems;
+  //   }
+  //   setCartItems(newCartItems);
+  // }
 
   async function deleteCartItem(cartItemId) {
     const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
@@ -149,9 +159,10 @@ function App() {
     <DataContext.Provider
       value={{
         products,
+        cartData,
         cartItems,
         upsertToCart,
-        renderAddedCartItems,
+        // renderAddedCartItems,
         deleteCartItem,
         // itemQuantity,
         // incrementItemQuantity,
@@ -169,7 +180,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route
             path="/cart"
-            element={<Cart cartItems={cartItems} setCartItems={setCartItems} />}
+            element={<Cart cartData={cartData} cartItems={cartItems} setCartItems={setCartItems} />}
           />
         </Routes>
       </main>

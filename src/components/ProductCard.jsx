@@ -2,21 +2,39 @@ import { Paper } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
-import '../styles/ProductCard.css';
+import "../styles/ProductCard.css";
 
 function ProductCard({ product, addButtonHandler }) {
-  const { upsertToCart, renderAddedCartItems, cartItems, isInCart, itemQuantity, incrementItemQuantity } = useContext(DataContext);
+  const {
+    upsertToCart,
+    renderAddedCartItems,
+    cartItems,
+    isInCart,
+    itemQuantity,
+    incrementItemQuantity,
+    cartData
+  } = useContext(DataContext);
 
-//   const [itemQuantity, setItemQuantity] = useState(1);
-//     function incrementItemQuantity() {
-//         setItemQuantity(itemQuantity + 1);
-//     }
+  //   const [itemQuantity, setItemQuantity] = useState(1);
+  //     function incrementItemQuantity() {
+      //         setItemQuantity(itemQuantity + 1);
+      //     }
+      
+      // console.log(product.id)
+      // console.log(itemQuantity)
+      // console.log(itemQuantity[product.id - 1])
+      console.log(cartData)
+      
+  const chosenProduct = cartData.find(item => { // study this
+    console.log(item.id)
+    console.log(product.id)
+    return item.id === product.id;
+  })
 
-// console.log(product.id)
-// console.log(itemQuantity)
-// console.log(itemQuantity[product.id - 1])
+  console.log(chosenProduct)
 
-  const cartData = {
+  // if item doesn't already exist in cart
+  const itemData = {
     fields: {
       id: product.id,
       brand: product.brand,
@@ -30,23 +48,24 @@ function ProductCard({ product, addButtonHandler }) {
       thumbnail: product.thumbnail,
       title: product.title,
     //   quantity: itemQuantity[product.id - 1] + 1,
-    //   quantity: itemQuantity,
+      quantity: 1 // need to get the quantity of the correct product (using chosenProduct?)
     },
-};
-  
+  };
+
+  // if item already exists in cart
+  const quantityData = {
+    fields: {
+    //   quantity: itemQuantity[product.id - 1] + 1,
+      quantity: 1 // need to get the quantity of the correct product (using chosenProduct?)
+    },
+  };
+
   function addButtonHandler() {
-console.log(itemQuantity)
-    // if (isInCart) incrementItemQuantity();
+    console.log(itemQuantity);
 
-    //   const quantityData = {
-    //     fields: {
-    //         quantity: itemQuantity[product.id - 1] + 1
-    //     }
-    //   }
-
-      upsertToCart(product.id, cartData, quantityData); // send post request
-      console.log(cartData.fields.quantity)
-      console.log(quantityData.fields.quantity)
+    upsertToCart(product.id, itemData, quantityData); // send post request
+    console.log(itemData.fields.quantity);
+    console.log(quantityData.fields.quantity);
     //   renderAddedCartItems(product); // display cart items
   }
 
