@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CartItem from './CartItem'
 
-function Cart({ cartData, cartItems, setCartItems }) {
+function Cart({ cartData, cartItems, setCartItems, fetchCartData }) {
     // declare quantity for products here so that each product card has individual quantity
     // const [itemQuantity, setItemQuantity] = useState(1);
     // function incrementItemQuantity() {
@@ -34,6 +34,10 @@ function Cart({ cartData, cartItems, setCartItems }) {
 //         }
 //         fetchCartItems();
 //       }, []);
+// console.log(cartData)
+
+// // fetchCartData();
+// console.log(cartData)
 
   return (
     <div>

@@ -31,27 +31,31 @@ function App() {
   // }
   // console.log(itemQuantity)
 
+  console.log(cartItems)
+
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
-    async function fetchCartData() {
-      const response = await fetch(`${BASE_URL}/cart`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      })
-      const jsonData = await response.json();
-      const fetchedCartData = jsonData.records.map((data) => ({
-        ...data.fields,
-        // id: data.id,
-      }));
-      setCartData(fetchedCartData)
-      // console.log(jsonData.records)
-    }
     fetchCartData();
   },[])
+  async function fetchCartData() {
+    const response = await fetch(`${BASE_URL}/cart`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    })
+    const jsonData = await response.json();
+    const fetchedCartData = jsonData.records.map((data) => ({
+      ...data.fields,
+      // id: data.id, // will turn id from number to gibberish but need this for delete to work
+    }));
+    setCartData(fetchedCartData)
+    console.log("fetching cart data from airtable...")
+    console.log(cartData)
+    // console.log(jsonData.records)
+  }
   
-  console.log(cartData)
+  // console.log(cartData)
 
   // function incrementItemQuantity(cartItemId) {
   //   cartData.map(item => {
@@ -95,6 +99,44 @@ function App() {
   //   const json = await response.json();
   // }
 
+  async function incrementItemQuantity(cartItemId, quantityData) {
+    console.log("first")
+    const response = await fetch(
+      `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+    const records = await response.json();
+    console.log(records.records);
+      // if record exists, update it
+      const existingRecordId = records.records[0].id;
+      console.log(existingRecordId);
+      await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(quantityData),
+      });
+      // console.log(cartItemId)
+      // console.log(cartData)
+      const selectedProduct = cartData.find(item => item.id === cartItemId)
+      // console.log(selectedProduct.quantity)
+      selectedProduct.quantity++; // need to increment on the frontend too
+      // console.log(selectedProduct.quantity)
+
+      // incrementItemQuantity(cartItemId);
+      console.log("Record updated:", existingRecordId);
+  }
+
+
+
+
   async function upsertToCart(cartItemId, itemData, quantityData) {
     const response = await fetch(
       `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
@@ -120,9 +162,17 @@ function App() {
         },
         body: JSON.stringify(quantityData),
       });
+      // console.log(cartItemId)
+      // console.log(cartData)
+      const selectedProduct = cartData.find(item => item.id === cartItemId)
+      // console.log(selectedProduct.quantity)
+      selectedProduct.quantity++; // need to increment on the frontend too
+      // console.log(selectedProduct.quantity)
+
       // incrementItemQuantity(cartItemId);
-      // console.log("Record updated:", existingRecordId);
+      console.log("Record updated:", existingRecordId);
     } else {
+      // item is not already in the cart
       await fetch(`${BASE_URL}/cart`, {
         method: "POST",
         headers: {
@@ -131,7 +181,7 @@ function App() {
         },
         body: JSON.stringify(itemData),
       });
-      // console.log("New record inserted for ID: ", cartItemId);
+      console.log("New record inserted for ID: ", cartItemId);
     }
   }
 
@@ -144,6 +194,7 @@ function App() {
   // }
 
   async function deleteCartItem(cartItemId) {
+    console.log(cartItemId)
     const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
       method: "DELETE",
       headers: {
@@ -165,7 +216,8 @@ function App() {
         // renderAddedCartItems,
         deleteCartItem,
         // itemQuantity,
-        // incrementItemQuantity,
+        incrementItemQuantity,
+        fetchCartData
       }}
     >
       <Navbar />
@@ -180,7 +232,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route
             path="/cart"
-            element={<Cart cartData={cartData} cartItems={cartItems} setCartItems={setCartItems} />}
+            element={<Cart cartData={cartData} cartItems={cartItems} setCartItems={setCartItems} fetchCartData={fetchCartData} />}
           />
         </Routes>
       </main>

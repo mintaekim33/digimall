@@ -6,6 +6,7 @@ function CartItem({ cartItem }) {
     const { upsertToCart, incrementItemQuantity, deleteCartItem } = useContext(DataContext);
 
     // console.log(cartItem.id) // not number since it's from the airtable 
+    console.log(cartItem)
 
   return (
     <div className='cartItemsContainer'>
