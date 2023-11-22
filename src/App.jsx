@@ -31,7 +31,7 @@ function App() {
   // }
   // console.log(itemQuantity)
 
-  console.log(cartItems)
+  // console.log(cartItems)
 
   const [cartData, setCartData] = useState([]);
   useEffect(() => {
@@ -87,57 +87,48 @@ function App() {
     "pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573";
   const BASE_URL = "https://api.airtable.com/v0/app2XUWkEqc6qfyPb";
 
-  // async function addToCart(cartData) {
-  //   const response = await fetch(`${BASE_URL}/cart`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${TOKEN}`,
-  //     },
-  //     body: JSON.stringify(cartData),
-  //   })
-  //   const json = await response.json();
-  // }
+  async function addToCart(itemData) {
+    const response = await fetch(`${BASE_URL}/cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: JSON.stringify(itemData),
+    })
+    const json = await response.json();
 
-  async function incrementItemQuantity(cartItemId, quantityData) {
-    console.log("first")
-    const response = await fetch(
-      `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-        },
-      }
-    );
-    const records = await response.json();
-    console.log(records.records);
-      // if record exists, update it
-      const existingRecordId = records.records[0].id;
-      console.log(existingRecordId);
-      await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(quantityData),
-      });
-      // console.log(cartItemId)
-      // console.log(cartData)
-      const selectedProduct = cartData.find(item => item.id === cartItemId)
-      // console.log(selectedProduct.quantity)
-      selectedProduct.quantity++; // need to increment on the frontend too
-      // console.log(selectedProduct.quantity)
+    const newCartData = [...cartData, itemData]; // unique key prop warning?
+    setCartData(newCartData);
 
-      // incrementItemQuantity(cartItemId);
-      console.log("Record updated:", existingRecordId);
+    // const selectedProduct = products.find(item => item.id === itemId)
+    // console.log(products)
+    // console.log(itemId)
+    // selectedProduct.quantity = 1;
   }
 
+  async function incrementItemQuantity(cartItem) {
+    console.log(cartItem)
+    const quantityData = JSON.stringify({
+          fields: {
+        quantity: cartItem.quantity + 1,
+      },
+    })
+    updateItemQuantity(cartItem.id, quantityData);
+    fetchCartData();
+  }
 
-
-
-  async function upsertToCart(cartItemId, itemData, quantityData) {
+  async function decrementItemQuantity(cartItem) {
+    const quantityData = JSON.stringify({
+          fields: {
+        quantity: cartItem.quantity + 1,
+      },
+    })
+    updateItemQuantity(cartItem.id, quantityData);
+    fetchCartData();
+  }
+ 
+  async function updateItemQuantity(cartItemId, quantityData) {
     const response = await fetch(
       `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
       {
@@ -149,8 +140,6 @@ function App() {
     );
     const records = await response.json();
     // console.log(records.records);
-
-    if (records && records.records.length > 0) {
       // if record exists, update it
       const existingRecordId = records.records[0].id;
       // console.log(existingRecordId);
@@ -160,47 +149,93 @@ function App() {
           Authorization: `Bearer ${TOKEN}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(quantityData),
+        body: quantityData,
       });
-      // console.log(cartItemId)
-      // console.log(cartData)
       const selectedProduct = cartData.find(item => item.id === cartItemId)
-      // console.log(selectedProduct.quantity)
-      selectedProduct.quantity++; // need to increment on the frontend too
-      // console.log(selectedProduct.quantity)
-
-      // incrementItemQuantity(cartItemId);
+      selectedProduct.quantity++; // need to increment on the frontend too (seems like this will increment cart data state variable???)
       console.log("Record updated:", existingRecordId);
-    } else {
-      // item is not already in the cart
-      await fetch(`${BASE_URL}/cart`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(itemData),
-      });
-      console.log("New record inserted for ID: ", cartItemId);
-    }
   }
 
-  // function renderAddedCartItems(item) {
-  //   const newCartItems = [...cartItems, item];
-  //   if (cartItems.includes(item)) {
-  //     return cartItems;
+  // async function upsertToCart(cartItemId, itemData, quantityData) {
+  //   const response = await fetch(
+  //     `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${TOKEN}`,
+  //       },
+  //     }
+  //   );
+  //   const records = await response.json();
+  //   // console.log(records.records);
+
+  //   if (records && records.records.length > 0) {
+  //     // if record exists, update it
+  //     const existingRecordId = records.records[0].id;
+  //     // console.log(existingRecordId);
+  //     await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         Authorization: `Bearer ${TOKEN}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(quantityData),
+  //     });
+  //     // console.log(cartItemId)
+  //     // console.log(cartData)
+  //     const selectedProduct = cartData.find(item => item.id === cartItemId)
+  //     // console.log(selectedProduct.quantity)
+  //     selectedProduct.quantity++; // need to increment on the frontend too
+  //     // console.log(selectedProduct.quantity)
+
+  //     // incrementItemQuantity(cartItemId);
+  //     console.log("Record updated:", existingRecordId);
+  //   } else {
+  //     // item is not already in the cart
+  //     await fetch(`${BASE_URL}/cart`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${TOKEN}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(itemData),
+  //     });
+  //     console.log("New record inserted for ID: ", cartItemId);
   //   }
-  //   setCartItems(newCartItems);
   // }
 
+  function renderAddedCartItems(item) {
+    const newCartItems = [...cartItems, item];
+    if (cartItems.includes(item)) {
+      return cartItems;
+    }
+    setCartItems(newCartItems);
+  }
+
   async function deleteCartItem(cartItemId) {
-    console.log(cartItemId)
-    const response = await fetch(`${BASE_URL}/cart/${cartItemId}`, {
+
+    const res = await fetch(
+      `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+        },
+      }
+    );
+    const records = await res.json();
+    console.log(records.records);
+
+    const recordId = records.records[0].id;
+
+    console.log(cartItemId) // this is number; should get record id 
+    const response = await fetch(`${BASE_URL}/cart/${recordId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
     });
+    console.log(cartItems)
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.id !== cartItemId)
     );
@@ -212,12 +247,16 @@ function App() {
         products,
         cartData,
         cartItems,
-        upsertToCart,
-        // renderAddedCartItems,
+        // upsertToCart,
+        renderAddedCartItems,
         deleteCartItem,
         // itemQuantity,
+        // incrementItemQuantity,
+        fetchCartData,
+        addToCart,
+        // updateItemQuantity
         incrementItemQuantity,
-        fetchCartData
+        decrementItemQuantity
       }}
     >
       <Navbar />
