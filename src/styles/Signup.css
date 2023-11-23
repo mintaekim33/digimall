@@ -16,7 +16,7 @@ form#signup {
 }
 
 
-input {
+.form-input > input {
     display: block;
     width: 100%;
     padding: 0.75rem;
@@ -29,11 +29,11 @@ input {
     transition: background 0.2s, border-color 0.2s;
 }
 
-input:focus {
+.form-input > input:focus {
     background: #ffffff;
 }
 
-form button {
+.form-button {
     width: 100%;
     padding: 1rem;
     font-weight: bold;
@@ -46,11 +46,11 @@ form button {
     cursor: pointer;
 }
 
-form button:hover {
+.form-button:hover {
     background: #00802b;
 }
 
-form button:active {
+.form-button:active {
     transform: scale(0.98);
 }
 

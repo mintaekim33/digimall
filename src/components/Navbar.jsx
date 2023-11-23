@@ -16,7 +16,7 @@ function Navbar() {
     <AppBar position="static">
       <Toolbar>
         <LocalOfferOutlinedIcon />
-        <Typography variant="h6" component='div' sx={{ flexGrow: 1 }}>
+        <Typography  className='digimall' variant="h6" component='div' sx={{ flexGrow: 1 }}>
           Digimall
         </Typography>
         <Stack direction="row" spacing={3}>

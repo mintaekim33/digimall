@@ -1,7 +1,6 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
   text-align: center;
 }
 
@@ -39,4 +38,30 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.switch {
+  display: flex;
+  float: right;
+  margin: 20px 10px;
+  align-items: center;
+}
+
+.switch label {
+  margin: 10px;
+}
+#light .switch label {
+  color: black
+}
+#dark .switch label {
+  color: white;
+}
+
+
+#light {
+  background-color: #f0f0f1;
+}
+
+#dark {
+  background-color: #8b91b1;
 }
