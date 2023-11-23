@@ -8,6 +8,8 @@ import Cart from "./components/Cart";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import ProductDetails from "./components/ProductDetails";
+import Signup from "./components/Signup";
+import Identify from "./components/Identify";
 
 export const DataContext = createContext();
 
@@ -209,6 +211,8 @@ function App() {
           />
           <Route path="/products/:productId" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/identify" element={<Identify />} />
           <Route
             path="/cart"
             element={<Cart cartData={cartData} cartItems={cartItems} setCartItems={setCartItems} fetchCartData={fetchCartData} />}
