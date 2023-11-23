@@ -15,13 +15,6 @@ function App() {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
-  // const [itemQuantity, setItemQuantity] = useState(1);
-  // function incrementItemQuantity(cartItemId) {
-  //     setItemQuantity(prevQty => {
-  //       return prevQty + 1;
-  //     });
-  // }
-
   // const [itemQuantity, setItemQuantity] = useState(new Array(30).fill(0));  // retrieve from backend
   // function incrementItemQuantity(cartItemId) {
   //   // setItemQuantity(itemQuantity[cartItemId - 1] + 1);
@@ -47,11 +40,11 @@ function App() {
     const jsonData = await response.json();
     const fetchedCartData = jsonData.records.map((data) => ({
       ...data.fields,
-      // id: data.id, // will turn id from number to gibberish but need this for delete to work
+      // id: data.id,
     }));
-    setCartData(fetchedCartData)
-    console.log("fetching cart data from airtable...")
-    console.log(cartData)
+    setCartData(fetchedCartData);
+    // console.log("fetching cart data from airtable...");
+    // console.log(cartData);
     // console.log(jsonData.records)
   }
   
@@ -61,15 +54,6 @@ function App() {
   //   cartData.map(item => {
   //     if (item.id === cartItemId) item.quantity++;
   //   })
-  // }
-
-
-  //   function addButtonHandler() {
-  //     console.log(product)
-  //     // setSelectedProduct(product); // choose selected product
-  //     // console.log(selectedProduct);
-  //     // constructCartData(); // create request body in a required format
-  //     // addToCart(); // send post request
   // }
 
   // fetch dummy products
@@ -97,9 +81,9 @@ function App() {
       body: JSON.stringify(itemData),
     })
     const json = await response.json();
-
-    const newCartData = [...cartData, itemData]; // unique key prop warning?
-    setCartData(newCartData);
+    fetchCartData();
+    // const newCartData = [...cartData, itemData]; // unique key prop warning?
+    // setCartData(newCartData);
 
     // const selectedProduct = products.find(item => item.id === itemId)
     // console.log(products)
@@ -108,23 +92,24 @@ function App() {
   }
 
   async function incrementItemQuantity(cartItem) {
-    console.log(cartItem)
+    console.log(cartItem);
     const quantityData = JSON.stringify({
-          fields: {
+      fields: {
         quantity: cartItem.quantity + 1,
       },
-    })
-    updateItemQuantity(cartItem.id, quantityData);
+    });
+    await updateItemQuantity(cartItem.id, quantityData);
+    // updateItemQuantity should be asynchronous
     fetchCartData();
   }
 
   async function decrementItemQuantity(cartItem) {
     const quantityData = JSON.stringify({
           fields: {
-        quantity: cartItem.quantity + 1,
+        quantity: cartItem.quantity - 1,
       },
-    })
-    updateItemQuantity(cartItem.id, quantityData);
+    });
+    await updateItemQuantity(cartItem.id, quantityData);
     fetchCartData();
   }
  
@@ -143,7 +128,7 @@ function App() {
       // if record exists, update it
       const existingRecordId = records.records[0].id;
       // console.log(existingRecordId);
-      await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
+      const res = await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${TOKEN}`,
@@ -151,66 +136,20 @@ function App() {
         },
         body: quantityData,
       });
-      const selectedProduct = cartData.find(item => item.id === cartItemId)
-      selectedProduct.quantity++; // need to increment on the frontend too (seems like this will increment cart data state variable???)
+      // update cart item with the returned item 
+
+      // const selectedProduct = cartData.find(item => item.id === cartItemId)
+      // selectedProduct.quantity++; // need to increment on the frontend too (seems like this will increment cart data state variable?)
       console.log("Record updated:", existingRecordId);
   }
 
-  // async function upsertToCart(cartItemId, itemData, quantityData) {
-  //   const response = await fetch(
-  //     `${BASE_URL}/cart?filterByFormula=id=${cartItemId}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${TOKEN}`,
-  //       },
-  //     }
-  //   );
-  //   const records = await response.json();
-  //   // console.log(records.records);
-
-  //   if (records && records.records.length > 0) {
-  //     // if record exists, update it
-  //     const existingRecordId = records.records[0].id;
-  //     // console.log(existingRecordId);
-  //     await fetch(`${BASE_URL}/cart/${existingRecordId}`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         Authorization: `Bearer ${TOKEN}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(quantityData),
-  //     });
-  //     // console.log(cartItemId)
-  //     // console.log(cartData)
-  //     const selectedProduct = cartData.find(item => item.id === cartItemId)
-  //     // console.log(selectedProduct.quantity)
-  //     selectedProduct.quantity++; // need to increment on the frontend too
-  //     // console.log(selectedProduct.quantity)
-
-  //     // incrementItemQuantity(cartItemId);
-  //     console.log("Record updated:", existingRecordId);
-  //   } else {
-  //     // item is not already in the cart
-  //     await fetch(`${BASE_URL}/cart`, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${TOKEN}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(itemData),
-  //     });
-  //     console.log("New record inserted for ID: ", cartItemId);
+  // function renderAddedCartItems(item) {
+  //   const newCartItems = [...cartItems, item];
+  //   if (cartItems.includes(item)) {
+  //     return cartItems;
   //   }
+  //   setCartItems(newCartItems);
   // }
-
-  function renderAddedCartItems(item) {
-    const newCartItems = [...cartItems, item];
-    if (cartItems.includes(item)) {
-      return cartItems;
-    }
-    setCartItems(newCartItems);
-  }
 
   async function deleteCartItem(cartItemId) {
 
@@ -235,11 +174,12 @@ function App() {
         Authorization: `Bearer ${TOKEN}`,
       },
     });
-    console.log(cartItems)
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.id !== cartItemId)
+    console.log(cartData)
+    setCartData((prevItems) =>
+    prevItems.filter((item) => item.id !== cartItemId)
     );
   }
+  console.log(cartData)
 
   return (
     <DataContext.Provider
@@ -248,7 +188,7 @@ function App() {
         cartData,
         cartItems,
         // upsertToCart,
-        renderAddedCartItems,
+        // renderAddedCartItems,
         deleteCartItem,
         // itemQuantity,
         // incrementItemQuantity,

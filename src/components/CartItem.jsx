@@ -6,7 +6,7 @@ function CartItem({ cartItem }) {
     const { upsertToCart, deleteCartItem, updateItemQuantity, fetchCartData, incrementItemQuantity, decrementItemQuantity } = useContext(DataContext);
 
     // console.log(cartItem.id) // not number since it's from the airtable 
-    console.log(cartItem)
+    // console.log(cartItem)
 
     // async function incrementItemQuantity(cartItemId) {
     //     const quantityData = JSON.stringify({

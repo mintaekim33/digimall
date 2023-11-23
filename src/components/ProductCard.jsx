@@ -17,11 +17,6 @@ function ProductCard({ product, addButtonHandler }) {
     addToCart
   } = useContext(DataContext);
 
-  //   const [itemQuantity, setItemQuantity] = useState(1);
-  //     function incrementItemQuantity() {
-  //         setItemQuantity(itemQuantity + 1);
-  //     }
-
   // console.log(product.id)
   // console.log(itemQuantity)
   // console.log(itemQuantity[product.id - 1])
@@ -38,26 +33,6 @@ function ProductCard({ product, addButtonHandler }) {
   //   console.log(product)
   // console.log(chosenProductId)
 
-  //   // if item doesn't already exist in cart
-  //   const itemData = {
-  //     fields: {
-  //       id: product.id,
-  //       brand: product.brand,
-  //       category: product.category,
-  //       description: product.description,
-  //       discountPercentage: product.discountPercentage,
-  //       image: product.images[0],
-  //       price: product.price,
-  //       rating: product.rating,
-  //       stock: product.stock,
-  //       thumbnail: product.thumbnail,
-  //       title: product.title,
-  //       //   quantity: itemQuantity[product.id - 1] + 1,
-  //       quantity: 1, // need to get the quantity of the correct product (using chosenProduct?)
-  //       //   quantity: chosenProduct.quantity// need to get the quantity of the correct product (using chosenProduct?)
-  //     },
-  //   };
-
   // console.log(cartData)
   //   console.log(product.id)
 
@@ -65,11 +40,6 @@ function ProductCard({ product, addButtonHandler }) {
     // if cart items includes product
     console.log(cartData)
     // console.log(product)
-    // if (cartData.forEach(item => {
-    //     if (item.id === product.id) {
-
-    //     }
-    // })) {
     const chosenProduct = cartData.find((item) => {
       //   console.log(item.id);
       //   console.log(product.id);
@@ -79,16 +49,13 @@ function ProductCard({ product, addButtonHandler }) {
 
     // if the product exists in the cart
     if (chosenProduct) {
-      const quantityData = {
-        fields: {
-          //   quantity: itemQuantity[product.id - 1] + 1,
-          //   quantity: chosenProduct ? chosenProduct.quantity + 1 : 0// need to get the quantity of the correct product (using chosenProduct?)
-          // quantity: 1 // need to get the quantity of the correct product (using chosenProduct?)
-          quantity: chosenProduct.quantity + 1, // need to get the quantity of the correct product (using chosenProduct?)
-        },
-      };
-      console.log(product)
-      incrementItemQuantity(product);
+    //   const quantityData = {
+    //     fields: {
+    //       quantity: chosenProduct.quantity + 1, // need to get the quantity of the correct product (using chosenProduct?)
+    //     },
+    //   };
+    //   console.log(product)
+      incrementItemQuantity(chosenProduct);
     } else {
       // if item doesn't already exist in cart
       const itemData = {
@@ -108,7 +75,7 @@ function ProductCard({ product, addButtonHandler }) {
         },
       };
       addToCart(itemData);
-      fetchCartData();
+    //   fetchCartData();
     }
 
     // } else {
@@ -129,7 +96,7 @@ function ProductCard({ product, addButtonHandler }) {
     // fetchCartData();
     // console.log(itemData.fields.quantity);
     // console.log(quantityData.fields.quantity);
-      renderAddedCartItems(product); // display cart items
+    //   renderAddedCartItems(product); // display cart items
     //   console.log(cartItems)
   }
 
