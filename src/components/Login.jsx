@@ -24,7 +24,7 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="loginBody">
       {display ? (
         <form id="login" onSubmit={submitHandler}>
           <h2 className="form-title">Log In</h2>
@@ -64,7 +64,7 @@ function Login() {
           </div>
         </form>
       ) : (
-        <h1 style={{ textAlign: "center" }}>Welcome {details.username}</h1>
+        <h1 className="welcome-message">Welcome {details.username}</h1>
       )}
     </div>
   );

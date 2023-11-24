@@ -48,8 +48,7 @@ function App() {
   }, []);
 
   //use airtable for CRUD
-  const TOKEN =
-    "pat8pPTkg9mFBwoGR.c373b443fc47d4a8fb0a9ac5769a153bb78f9f4287b210b8852f6e7557fe5573";
+  const TOKEN = import.meta.env.VITE_AIRTABLE_TOKEN;
   const BASE_URL = "https://api.airtable.com/v0/app2XUWkEqc6qfyPb";
 
   async function addToCart(itemData) {

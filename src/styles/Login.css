@@ -69,3 +69,14 @@ form#login {
 .form-link:hover {
     text-decoration: underline;
 }
+
+.welcome-message {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+}
+
+#dark .welcome-message {
+    color: whitesmoke;
+}

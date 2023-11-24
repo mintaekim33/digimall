@@ -97,3 +97,10 @@ input.invalid +p {
 p {
     pointer-events: none;
 }
+
+.register-message {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+}
