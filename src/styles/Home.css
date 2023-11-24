@@ -1,0 +1,25 @@
+.homepage {
+    /* color: white; */
+    height: 100%;
+    padding: 10%;
+}
+
+#light .homeContainer {
+    color: black;
+}
+
+#dark .homeContainer {
+    color: whitesmoke;
+}
+
+.welcome {
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+.products-display {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    /* border: 3px solid gold; */
+
+}

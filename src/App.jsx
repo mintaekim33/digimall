@@ -16,7 +16,6 @@ export const ThemeContext = createContext(null);
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]); // not used?
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
@@ -67,7 +66,6 @@ function App() {
   }
 
   async function incrementItemQuantity(cartItem) {
-    console.log(cartItem);
     const quantityData = JSON.stringify({
       fields: {
         quantity: cartItem.quantity + 1,
@@ -79,6 +77,7 @@ function App() {
   }
 
   async function decrementItemQuantity(cartItem) {
+    if (cartItem.quantity === 1) return;
     const quantityData = JSON.stringify({
       fields: {
         quantity: cartItem.quantity - 1,
@@ -110,7 +109,7 @@ function App() {
       body: quantityData,
     });
     // update cart item with the returned item (res will return the updated item so insert that to the cart data to be rendered)
-    console.log("Record updated:", existingRecordId);
+    // console.log("Record updated:", existingRecordId);
   }
 
   async function deleteCartItem(cartItemId) {
@@ -126,14 +125,14 @@ function App() {
     const records = await res.json();
     const recordId = records.records[0].id;
 
-    console.log(cartItemId); // this is number; should get record id
+    // console.log(cartItemId); // this is number; should get record id
     const response = await fetch(`${BASE_URL}/cart/${recordId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${TOKEN}`,
       },
     });
-    console.log(cartData);
+
     setCartData((prevItems) =>
       prevItems.filter((item) => item.id !== cartItemId)
     );
@@ -152,7 +151,6 @@ function App() {
           value={{
             products,
             cartData,
-            cartItems,
             deleteCartItem,
             fetchCartData,
             addToCart,
@@ -181,12 +179,7 @@ function App() {
               <Route
                 path="/cart"
                 element={
-                  <Cart
-                    cartData={cartData}
-                    cartItems={cartItems}
-                    setCartItems={setCartItems}
-                    fetchCartData={fetchCartData}
-                  />
+                  <Cart cartData={cartData} fetchCartData={fetchCartData} />
                 }
               />
             </Routes>

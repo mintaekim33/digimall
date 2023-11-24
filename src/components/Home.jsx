@@ -1,15 +1,33 @@
-import React from "react";
-import "../styles/Homepage.css";
+import React, { useContext } from "react";
+import "../styles/Home.css";
+import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { DataContext } from "../App";
 
 function Home() {
+  const { products } = useContext(DataContext);
+
   return (
     <div className="homepage">
       <div className="homeContainer">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat quod
-        possimus labore dolore aliquam non consequuntur, atque quae, vitae
-        corrupti quis error doloribus! Incidunt quia dignissimos officia aut
-        accusamus dolore eum praesentium veritatis quod repellat ratione commodi
-        ipsum atque harum esse, vitae a officiis est at sit quasi eius tenetur.
+        <div className="welcome">Welcome to Digimall</div>
+        <section className="products-section">
+          <Link to="/products">
+            <Button variant="contained" size="large">
+              View products
+            </Button>
+          </Link>
+          <div className="products-display">
+            {products.map((product) => (
+              <img
+                key={product.id}
+                src={product.thumbnail}
+                width={150}
+                height={150}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

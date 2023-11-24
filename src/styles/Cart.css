@@ -1,3 +1,44 @@
 .cartContainer {
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.blankCartContainer {
+    height: 100vh;
+    margin-top: 10%;
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 30px;
+}
+
+#dark .empty {
+    color: white;
+}
+
+.products-link {
+    font-size: 30px;
+    border: 1px solid black;
+    padding: 10px 20px;
+}
+
+.products-link:hover {
+    color: black;
+    background-color: lightsteelblue;
+    transition: 0.3s ease-in-out;
+}
+
+#dark .products-link {
+    color: white;
+} 
+
+#dark .total {
+    color: white;
 }

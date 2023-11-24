@@ -9,4 +9,22 @@
 .digimall {
     text-align: left;
     margin-left: 50px;
+
+}
+
+.nav-cart {
+    position: relative;
+}
+
+.nav-cart span {
+    position: absolute;
+    top: -12px;
+    right: -10px;
+    background-color: crimson;
+    font-size: 10px;
+    color: white;
+    width: 10px;
+    height: 15px;
+    padding: 3px 5px;
+    border-radius: 50%;
 }

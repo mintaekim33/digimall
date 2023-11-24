@@ -1,0 +1,28 @@
+.productDetailsBody {
+    height: 100vh;
+    /* margin: 0 auto;; */
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+#dark .productDetailsBody {
+    color: whitesmoke;
+}
+
+.productDetailsCard {
+    /* padding: 80px; */
+    display: flex;
+    border: 2px solid black;
+    border-radius: 20px;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+#dark .productDetailsCard {
+    border: 2px solid whitesmoke;
+}
+
+.productDetailsCard-desc {
+    margin-left: 80px;
+    text-align: left;
+}

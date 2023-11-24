@@ -64,7 +64,7 @@ function Login() {
           </div>
         </form>
       ) : (
-        <h1 style={{textAlign: 'center'}}>Welcome {details.username}</h1>
+        <h1 style={{ textAlign: "center" }}>Welcome {details.username}</h1>
       )}
     </div>
   );

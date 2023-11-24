@@ -117,7 +117,9 @@ function Signup() {
           </div>
         </form>
       ) : (
-        <h1 style={{textAlign: 'center', color: 'whitesmoke'}}>Thanks for registering, {details.username}!</h1>
+        <h1 style={{ textAlign: "center", color: "whitesmoke" }}>
+          Thanks for registering, {details.username}!
+        </h1>
       )}
     </div>
   );
