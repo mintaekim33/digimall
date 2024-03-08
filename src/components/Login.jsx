@@ -20,7 +20,6 @@ function Login() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // console.log(details)
   };
 
   return (
