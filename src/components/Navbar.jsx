@@ -19,7 +19,9 @@ function Navbar() {
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          Digimall
+          <Link className="navlink" to="/">
+            Digimall
+          </Link>
         </Typography>
         <Stack direction="row" spacing={3}>
           <Link className="navlink" to="/">
