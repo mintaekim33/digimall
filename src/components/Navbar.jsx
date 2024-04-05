@@ -12,7 +12,6 @@ function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <LocalOfferOutlinedIcon />
         <Typography
           className="digimall"
           variant="h6"

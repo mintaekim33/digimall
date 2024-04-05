@@ -10,10 +10,10 @@ function Home() {
   return (
     <div className="homepage">
       <div className="homeContainer">
-        <div className="welcome">Welcome to Digimall</div>
+        <div className="welcome">Welcome to digimall</div>
         <section className="products-section">
           <Link to="/products">
-            <Button variant="contained" size="large">
+            <Button variant="contained" size="medium">
               View products
             </Button>
           </Link>
