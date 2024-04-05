@@ -6,10 +6,12 @@ import SearchIcon from "@mui/icons-material/Search";
 
 function Products({ products, setProducts }) {
   async function search(e) {
+    // fetch products data using the search keyword
     const response = await fetch(
       `https://dummyjson.com/products/search?q=${e.target.value}`
     );
     const jsonData = await response.json();
+    // display filtered products
     setProducts(jsonData.products);
   }
 
