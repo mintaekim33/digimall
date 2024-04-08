@@ -4,3 +4,9 @@
     display: grid;
     /* grid-template-columns: repeat(3, 350px); */
 }
+
+.searchBar {
+    /* border: 1px solid black; */
+    padding: 6px 10px;
+    margin: 6px 10px;
+}

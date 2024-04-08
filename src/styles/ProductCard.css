@@ -1,6 +1,7 @@
 .productCard {
     margin: 30px auto;
     padding: 30px;
-    border-radius: 50px;
-    background-color: aqua;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color:antiquewhite;
 }
