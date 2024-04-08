@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
@@ -40,14 +40,14 @@ function ProductCard({ product, addButtonHandler }) {
   }
 
   return (
-    <Paper className="productCard">
+    <Box className="productCard">
       <Link to={"/products/" + product.id}>
         <img src={product.images[0]} width="300" height="200" />
         <h5>{product.title}</h5>
       </Link>
       <h5>${product.price}</h5>
       <button onClick={addButtonHandler}>Add to cart</button>
-    </Paper>
+    </Box>
   );
 }
 
