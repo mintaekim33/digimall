@@ -18,7 +18,7 @@ function Cart({ cartData }) {
   ) : (
     <>
       <div className="cartContainer">
-        <div className="total">Total: {calculatedTotal}</div>
+        <div className="total">Total: ${calculatedTotal}</div>
         {cartData &&
           cartData.map((cartItem) => {
             return <CartItem key={cartItem.id} cartItem={cartItem} />;
