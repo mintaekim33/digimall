@@ -16,13 +16,16 @@ function Cart({ cartData }) {
       </Link>
     </div>
   ) : (
-    <div className="cartContainer">
-      <div className="total">Total: {calculatedTotal}</div>
-      {cartData &&
-        cartData.map((cartItem) => {
-          return <CartItem key={cartItem.id} cartItem={cartItem} />;
-        })}
-    </div>
+    <>
+      <div className="cartContainer">
+        <div className="total">Total: ${calculatedTotal}</div>
+        {cartData &&
+          cartData.map((cartItem) => {
+            return <CartItem key={cartItem.id} cartItem={cartItem} />;
+          })}
+      </div>
+      <button className="checkoutBtn">Checkout</button>
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
 .cartContainer {
-    height: 100vh;
+    /* height: 100vh; */
+    margin-top: 100px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -41,4 +42,8 @@
 
 #dark .total {
     color: white;
+}
+
+.checkoutBtn {
+    margin-bottom: 100px;
 }
