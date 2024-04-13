@@ -25,6 +25,7 @@ function Cart({ cartData }) {
           })}
       </div>
       <button className="checkoutBtn">Checkout</button>
+      {/* form action="/create-checkout-session" method="POST" */}
     </>
   );
 }
