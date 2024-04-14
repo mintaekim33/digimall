@@ -16,5 +16,9 @@ const storeItems = new Map([
   [2, { priceInCents: 15000, name: "Learn CSS Today" }],
 ]);
 
+app.post("/create-checkout-session", (req, res) => {
+  res.json({ url: "Hi" });
+});
+
 // Start up our server on port 3000
 app.listen(3000);
