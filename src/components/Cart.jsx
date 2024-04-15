@@ -31,10 +31,9 @@ function checkout() {
     .then(({ url }) => {
       // On success redirect the customer to the returned URL
       // window.location = url;
-      console.log("url");
+      console.log(url);
     })
     .catch((e) => {
-      console.log("rul");
       console.error(e.error);
     });
 }

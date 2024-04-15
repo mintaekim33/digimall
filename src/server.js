@@ -16,7 +16,15 @@ const storeItems = new Map([
   [2, { priceInCents: 15000, name: "Learn CSS Today" }],
 ]);
 
-app.post("/create-checkout-session", (req, res) => {
+app.post("/create-checkout-session", async (req, res) => {
+  try {
+    // const session = await stripe.checkout.sessions.create({
+    //   payment_method_types
+    // });
+    // res.json({ url: session.url })
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
   res.json({ url: "Hi" });
 });
 
