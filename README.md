@@ -1,4 +1,6 @@
 # Digimall
+[Demo Link](https://digimall.vercel.app/)
+
 An online e-commerce website to demonstrate CRUD requests  
 Customers can add products to the cart and update the item quantities in the cart. The items can be removed from the cart as well  
 Searchbar is available to filter the products by product name  
@@ -17,9 +19,6 @@ Dark mode is implemented using useContext hook
 React + Vite  
 Airtable API  
 Material UI  
-
-# Demo Link
-https://digimall.vercel.app/
 
 # Trello Board
 https://trello.com/b/wYkx4Enm/digimall
