@@ -50,7 +50,7 @@ function Signup() {
   };
 
   return (
-    <div>
+    <div className="signupBody">
       {display ? (
         <form id="signup" onSubmit={submitHandler}>
           <h2 className="form-title">Sign Up</h2>
